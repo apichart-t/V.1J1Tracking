@@ -1,8 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { LayoutDashboard, PenTool, History, LogOut, Menu, Settings, Users, Server } from 'lucide-react';
-
-// แก้ไขบรรทัดนี้ให้ถูกต้อง
 import { db } from './firebaseConfig'; 
 import { collection, onSnapshot } from 'firebase/firestore';
 import {
