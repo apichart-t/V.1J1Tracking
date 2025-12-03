@@ -1,3 +1,6 @@
+import { db } from './firebaseConfig'; // สังเกตว่าไม่มี ../ นำหน้าเพราะอยู่ระดับเดียวกัน
+import { collection, addDoc, onSnapshot } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 import React, { useState, useEffect } from 'react';
 import Login from './components/Login';
 import EntryForm from './components/EntryForm';
