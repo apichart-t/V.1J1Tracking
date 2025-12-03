@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { LayoutDashboard, PenTool, History, LogOut, Menu, Settings, Users, Server } from 'lucide-react';
 
-// Firebase Imports (หัวใจสำคัญของ Realtime)
+// Firebase Imports
 import { db } from './firebaseConfig'; 
-import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 
 // Component Imports
 import Login from './components/Login';
@@ -19,14 +19,14 @@ import Toast, { ToastMessage, ToastType } from './components/Toast';
 // Types
 import { User } from './types';
 
-// Service (ใช้เฉพาะบางตัวที่ไม่ได้ดึงจาก DB โดยตรง หรือจะเลิกใช้ก็ได้ถ้าเปลี่ยนมาใช้ Firebase หมด)
+// Services
 import { initializeProjects, cleanupTrash } from './services/storageService';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [activeTab, setActiveTab] = useState<'dashboard' | 'entry' | 'history' | 'projects' | 'units' | 'system'>('dashboard');
   
-  // เปลี่ยน State เริ่มต้นเป็น Array ว่าง [] เพื่อรอรับข้อมูลจาก Firebase
+  // State สำหรับรับข้อมูล Realtime
   const [reports, setReports] = useState<any[]>([]);
   const [projects, setProjects] = useState<any[]>([]);
   const [units, setUnits] = useState<any[]>([]);
@@ -35,8 +35,6 @@ const App: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
-  // ฟังก์ชันนี้ไม่ต้องทำงานหนักแล้ว เพราะ onSnapshot ทำให้เองอัตโนมัติ
-  // แต่ยังคงไว้เพื่อให้ส่งเป็น Props ไปยัง Child Components ไม่ให้ error
   const refreshData = () => {
     console.log("Data auto-synced via Firestore listeners");
   };
@@ -53,23 +51,29 @@ const App: React.FC = () => {
     setToasts(prev => prev.filter(t => t.id !== id));
   };
 
-  // --- Realtime Listeners (พระเอกของเรา) ---
+  // --- Realtime Listeners ---
   useEffect(() => {
     initializeProjects(); 
     cleanupTrash();
 
-    // 1. ดักฟัง Reports (ข้อมูลรายงาน)
+    // 1. ดักฟัง Reports
     const unsubReports = onSnapshot(collection(db, "reports"), (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      // แปลงข้อมูล Timestamp ถ้าจำเป็น หรือจัดการ Sort ที่นี่
       setReports(data);
     });
 
-    // 2. ดักฟัง Projects (โครงการ)
+    // 2. ดักฟัง Projects
     const unsubProjects = onSnapshot(collection(db, "projects"), (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setProjects(data);
     });
 
-    // 3. ดักฟัง Units (หน่วยงาน)
-    const unsubUnits = onSnapshot(collection(db, "units"),
+    // 3. ดักฟัง Units
+    const unsubUnits = onSnapshot(collection(db, "units"), (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setUnits(data);
+    });
+
+    // 4. ดักฟัง Project Groups (ถ้ามี)
+    // ถ้ายังไม่มี collection นี้ใน firebase มันจะคืนค่าว่างมา ไม่ error ครับ
+    const unsubGroups = onSnapshot(collection(db, "project_
