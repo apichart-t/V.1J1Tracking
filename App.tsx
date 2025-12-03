@@ -260,7 +260,7 @@ const App: React.FC = () => {
 
       {/* Footer */}
       <footer className="bg-gray-800 border-t border-gray-700 py-4 text-center text-sm text-gray-500">
-         &copy; 2569 กองกำลังพลทหาร (กพ.ทหาร) - <span className="text-orange-500">ระบบติดตามผลการดำเนินการ</span>
+         &copy; กรมกำลังพลทหาร (กพ.ทหาร) - <span className="text-orange-500">ระบบติดตามผลการดำเนินการ</span>
       </footer>
     </div>
   );
