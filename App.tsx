@@ -1,5 +1,5 @@
 import { db } from './firebaseConfig'; 
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebaseConfig';
 import {
   collection,
   onSnapshot,
