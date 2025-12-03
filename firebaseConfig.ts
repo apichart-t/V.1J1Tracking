@@ -8,7 +8,7 @@ const firebaseConfig = {
   storageBucket: "v-1-j1-tracking.firebasestorage.app",
   messagingSenderId: "624393995850",
   appId: "1:624393995850:web:162975d13598bc4eb508b3",
-  measurementId: "G-KXKVMYR9YX"
+
 };
 
 const app = initializeApp(firebaseConfig);
