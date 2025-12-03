@@ -72,7 +72,6 @@ const App: React.FC = () => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setUnits(data);
     });
-
     // 4. ดักฟัง Project Groups (ถ้ามี)
     const unsubGroups = onSnapshot(collection(db, "project_groups"), (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
